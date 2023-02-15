@@ -1,3 +1,3 @@
-C:/Users/Eruano/CLionProjects/A8/cmake-build-debug/CMakeFiles/A8.dir
-C:/Users/Eruano/CLionProjects/A8/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Eruano/CLionProjects/A8/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Karapuzo/Desktop/ITMO/Algorithms/A8/cmake-build-debug/CMakeFiles/A8.dir
+C:/Users/Karapuzo/Desktop/ITMO/Algorithms/A8/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Karapuzo/Desktop/ITMO/Algorithms/A8/cmake-build-debug/CMakeFiles/rebuild_cache.dir

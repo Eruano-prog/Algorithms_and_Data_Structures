@@ -39,33 +39,24 @@ int main() {
     std::vector<char> SentS;
     number = 0;
     cin >> letter;
-    cout << letter << endl;
+    int diffs = 0;
 
-    for (int i = 0; i < m-1; ++i) {
+    int i = 0;
+    while (i < count){
         cin >> ch;
-        if (ch > 64){
-            for (int j = 0; j < number; ++j) {
-                SentM.push_back(letter);
-            }
-            letter = ch;
-            number = 0;
+        if (ch < 64) {
+            number = number * 10 + ch - 48;
+            continue;
         }
         else{
-            number = number * 10 + ch - 48;
+            for (int j = 0; j < number; ++j) {
+                if(SentM[i] != letter){
+                    diffs
+                }
+            }
         }
     }
-    for (int j = 0; j < number; ++j) {
-        SentS.push_back(letter);
-    }
 
-    for (int i = 0; i < count; ++i) {
-        cout << SentM[i];
-    }
-    cout << endl;
-
-    for (int i = 0; i < count; ++i) {
-        cout << SentS[i];
-    }
 
     return 0;
 }

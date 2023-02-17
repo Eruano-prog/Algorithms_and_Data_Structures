@@ -1,10 +1,42 @@
 #include <iostream>
-#include <string>
 #include <vector>
 
 using std::cout;
 using std::cin;
 using std::endl;
+
+struct Node{
+    char data;
+    struct Node *next;
+};
+
+struct List{
+    struct Node* Head = nullptr;
+    struct Node* Tail = nullptr;
+
+    void enqueue(char data){
+        struct Node* node = (struct Node*) malloc(sizeof(struct Node*));
+        node->data = data;
+        node->next = nullptr;
+
+        if(Head == nullptr){
+            Head = node;
+            Tail = node;
+        }
+        else{
+            Tail->next = node;
+            Tail = node;
+        }
+    }
+    char dequeue(){
+        struct Node *temp = Head;
+        Head = Head->next;
+        char n = temp->data;
+        free(temp);
+        return n;
+    }
+};
+
 
 int main() {
     int n, m, k;
@@ -39,24 +71,31 @@ int main() {
     std::vector<char> SentS;
     number = 0;
     cin >> letter;
+    int ptr = 0;
     int diffs = 0;
 
-    int i = 0;
-    while (i < count){
+    for (int i = 0; i < m - 1; ++i) {
         cin >> ch;
-        if (ch < 64) {
-            number = number * 10 + ch - 48;
-            continue;
-        }
-        else{
+        if (ch > 64){
             for (int j = 0; j < number; ++j) {
-                if(SentM[i] != letter){
-                    diffs
+                if (SentM[ptr] != letter) {
+                    diffs++;
+                    ptr++;
                 }
             }
+            letter = ch;
+            number = 0;
+        }
+        else{
+            number = number * 10 + ch - 48;
         }
     }
 
-
+    if (diffs < k){
+        cout << "Yes";
+    }
+    else{
+        cout << "No";
+    }
     return 0;
 }

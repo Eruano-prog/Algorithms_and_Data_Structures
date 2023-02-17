@@ -1,3 +1,0 @@
-C:/Users/Eruano/CLionProjects/C8/cmake-build-debug/CMakeFiles/8.dir
-C:/Users/Eruano/CLionProjects/C8/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Eruano/CLionProjects/C8/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -10,10 +10,9 @@ bool check_bit(std::string const &string, int const &i){
     int res=0, k=0;
     int start = std::pow(2, i);
 
-    for (int j = start-1; j+k < string.length(); j += start) {
-        for (k = 0; j+k < string.length() || k <= i; ++k) {
-            res += string[j+k];
-            j++;
+    for (int j = start; j <= string.length(); j += start*2) {
+        for (k = 0; ((j+k <= string.length()) || (k < start)); ++k) {
+            res += string[j-1+k]-48;
         }
     }
 

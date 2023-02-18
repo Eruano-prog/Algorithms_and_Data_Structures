@@ -1,11 +1,9 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <queue>
 
 using std::cout;
 using std::cin;
-
 
 bool check_bit(std::string const &string, int const &i){
     int res=0, k=0;
@@ -37,10 +35,8 @@ void invert_on_pos(std::string &string, int const &pos){
 int main() {
     int t;
     cin >> t;
-    std::queue<std::string> ans;
     std::string str;
-    for (int k = 0; k < t; ++k) {
-        cin >> str;
+    while (cin >> str) {
         int pos = 0;
         int lg = log2(str.length());
         for (int i = 0; i <= lg; ++i) {
@@ -48,21 +44,15 @@ int main() {
                 pos += std::pow(2, i);
             }
         }
-        invert_on_pos(str, pos);
+        if(pos != 0) invert_on_pos(str, pos);
 
-        ans.push(str);
-    }
-
-    for (int i = 0; i < t; ++i) {
-        str = ans.front();
         for (int j = 0; j < str.length(); ++j) {
             double lg = log2(j+1);
             if((int)lg != lg){
-                cout << str[j];
+                cout << (int)str[j]-48;
             }
         }
         cout << std::endl;
-        ans.pop();
     }
 
     return 0;

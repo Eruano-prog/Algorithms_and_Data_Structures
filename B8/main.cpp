@@ -89,7 +89,7 @@ private:
         }
     }
 
-    Node* LRN_out(Node* node){
+    void LRN_out(Node* node){
         if (node->left != nullptr) LRN_out(node->left);
         if (node->right != nullptr) LRN_out(node->right);
         output.push_back(node->data);
@@ -126,7 +126,6 @@ int main() {
 
     for (int i = 0; i < Q; ++i) {
         cin >> k;
-        cout << k << std::endl;
         letters.change_pos(k - 1);
     }
 

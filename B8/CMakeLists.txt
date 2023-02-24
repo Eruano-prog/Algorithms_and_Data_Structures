@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
-project(B8)
+project(A8)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(B8 main.cpp)
+add_executable(A8 main.cpp)

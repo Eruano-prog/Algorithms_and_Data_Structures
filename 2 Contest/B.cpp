@@ -11,16 +11,13 @@ enum Color{
 };
 
 struct Node{
-    std::vector<int> bridges;
+    std::vector<Node*> bridges;
     Color color = white;
 
-    Node(int t){
-        for (int i = 0; i < t; ++i) {
-            bridges.push_back(0);
-        }
-    }
 };
 
+
+static int flag = 0;
 
 class Graph{
 public:
@@ -28,13 +25,13 @@ public:
 
      Graph(int t){
          for (int i = 0; i < t; ++i) {
-             nodes.push_back(new Node(t));
+             nodes.push_back(new Node);
          }
      }
 
     void add_bridge(int a, int b){
-        nodes[a-1]->bridges[b-1]++;
-        nodes[b-1]->bridges[a-1]++;
+        nodes[a-1]->bridges.push_back(nodes[b-1]);
+        nodes[b-1]->bridges.push_back(nodes[a-1]);
     }
 
     void DFS(){
@@ -43,7 +40,6 @@ public:
                 Visit(node);
             }
         }
-
      }
 
 private:
@@ -51,16 +47,16 @@ private:
     void Visit(Node* node){
         node->color = gray;
         int count = 0;
-        for (int bridge:node->bridges){
-            if(nodes[bridge]->color == white){
-                Visit(nodes[bridge]);
-            }
-            if(nodes[bridge]->color == gray){
+        for (Node* bridge:node->bridges){
+            if(bridge->color == gray){
                 count++;
+            }
+            if(bridge->color == white){
+                Visit(bridge);
             }
         }
         if (count > 1){
-            cout << "YES";
+            flag = 1;
         }
         node->color = black;
      }
@@ -79,6 +75,12 @@ int main(){
     }
     graph.DFS();
 
+    if (flag == 1){
+        cout << "YES";
+    }
+    else{
+        cout << "NO";
+    };
 
     return 0;
 }

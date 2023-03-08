@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring>
 #include <string>
 #include <vector>
 
@@ -26,4 +25,4 @@ int main(){
         cout << str << std::endl;
     }
     return 0;
-};
+}

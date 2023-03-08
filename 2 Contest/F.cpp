@@ -1,62 +1,62 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#inc
 
 using std::cout;
 using std::cin;
 
 enum Color{
     white,
+    grey,
     black,
 };
 
-struct Node {
+struct Node{
     std::vector<Node *> bridges;
     Color color = white;
-    int distance = -1;
 };
 
 
-class Graph {
+class Graph{
 public:
-    std::vector<Node *> nodes;
-    std::queue<Node *> order;
+    Node* nods;
+    int lenght;
 
     Graph(int t) {
+        nods = new Node[t];
         for (int i = 0; i < t; ++i) {
-            nodes.push_back(new Node);
+            nods[i] = Node();
         }
+        lenght = t;
     }
 
     void add_bridge(int a, int b) {
-        nodes[a - 1]->bridges.push_back(nodes[b - 1]);
-        nodes[b - 1]->bridges.push_back(nodes[a - 1]);
+        nods[a-1].bridges.push_back(&nods[b-1]);
+        nods[b-1].bridges.push_back(&nods[a-1]);
     }
 
-    void DFS(){
-        for (Node* node:nodes) {
-            if(node->color== white) {
-                Visit(node);
-            }
+    bool DFS(){
+        for (int i = 0; i < lenght; ++i) {
+            if(Visit(1, &nods[i])) return true;
         }
+        return false;
     }
 private:
-
-    void Visit(Node* node){
-        node->color = gray;
-        int count = 0;
-        for (Node* bridge:node->bridges){
-            if(bridge->color == gray){
-                count++;
+    bool Visit(int len, Node* node){
+        if (len == lenght){
+            return true;
+        }
+        node->color = grey;
+        for (auto bridge:node->bridges) {
+            if (bridge->color != white){
+                continue;
             }
-            if(bridge->color == white){
-                Visit(bridge);
+            if (Visit(len+1, bridge)){
+                return true;
             }
         }
-        if (count > 1){
-            flag = 1;
-        }
-        node->color = black;
+        node->color = white;
+        return false;
     }
 };
 
@@ -65,6 +65,19 @@ int main() {
     cin >> N >> M;
 
     Graph graph(N);
+
+    int a, b;
+
+    for (int i = 0; i < M; ++i) {
+        cin >> a >> b;
+        graph.add_bridge(a, b);
+    }
+    if (graph.DFS()){
+        cout << "YES" << std::endl;
+    }
+    else{
+        cout << "NO" << std::endl;
+    }
 
     return 0;
 }

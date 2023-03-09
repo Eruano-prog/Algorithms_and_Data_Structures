@@ -1,81 +1,74 @@
 #include <iostream>
-#include <string>
 #include <vector>
 
+using std::vector;
 using std::cout;
 using std::cin;
 
-enum Color{
-    white,
-    gray,
-    black,
-};
-
-struct Node{
-    std::vector<Node*> bridges;
-    Color color = white;
-
-};
-
+int N, M;
 
 class Graph{
+    vector<vector<char>> points;
+    vector<vector<bool>> visited;
+
+    int count = 0;
+
 public:
-    std::vector<Node*> nodes;
-
-
-    void add_node(){
-        nodes.push_back(new Node());
-    }
-
-    void add_bridge(int a, int b){
-        nodes.back()->bridges;
-    }
-
-    void DFS(){
-        for (Node* node:nodes) {
-            if(node->color== white) {
-                Visit(node);
+    Graph(){
+        points.resize(N, vector<char>(M));
+        visited.resize(N, vector<bool>(M, false));
+        char symb;
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < M; ++j) {
+                cin >> symb;
+                points[i][j] = symb;
             }
         }
+    }
+
+    void check_points(){
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < M; ++j) {
+                if (points[i][j] == '.' && !visited[i][j]){
+                    count++;
+                    DFS(i, j);
+                }
+            }
+        }
+    }
+
+    int get_amount() const{
+        return count;
     }
 
 private:
-    int count = 0;
 
-    void Visit(Node* node){
-        node->color = gray;
-        for (Node* bridge:node->bridges){
-            if(bridge->color == white){
-                Visit(bridge);
-            }
+    void DFS(int i, int j){
+        visited[i][j] = true;
+
+        if ((i+1 < N) && points[i+1][j] == '.' && !visited[i+1][j]){
+            DFS(i+1, j);
         }
-        node->color = black;
+        if ((i-1 >= 0) && points[i-1][j] == '.' && !visited[i-1][j]){
+            DFS(i-1, j);
+        }
+        if ((j+1 < M) && points[i][j+1] == '.' && !visited[i][j+1]){
+            DFS(i, j+1);
+        }
+        if ((j-1 >= 0) && points[i][j-1] == '.' && !visited[i][j-1]){
+            DFS(i, j-1);
+        }
     }
 };
 
 int main(){
-    int n, m;
-    std::cin >> n >> m;
-
-    char M[n][m];
-
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            cin >> M[i][j];
-        }
-    }
-
+    cin >> N >> M;
 
     Graph graph;
 
-    for (int i = 0; i < n; ++i) {
-        for (int j = 0; j < m; ++j) {
-            if (M[i][j] == '.'){
-                graph.add_node();
-                
-            }
-        }
-    }
+    graph.check_points();
+
+    cout << graph.get_amount();
 
     return 0;
 }

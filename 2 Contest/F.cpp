@@ -10,32 +10,33 @@ enum Color{
     black,
 };
 
-struct Node {
+struct Node{
     std::vector<Node *> bridges;
     Color color = white;
 };
 
 
-class Graph {
+class Graph{
 public:
-    std::vector<Node *> nodes;
+    Node* nods;
     int lenght;
 
     Graph(int t) {
+        nods = new Node[t];
         for (int i = 0; i < t; ++i) {
-            nodes.push_back(new Node);
-            lenght = t;
+            nods[i] = Node();
         }
+        lenght = t;
     }
 
     void add_bridge(int a, int b) {
-        nodes[a - 1]->bridges.push_back(nodes[b - 1]);
-        nodes[b - 1]->bridges.push_back(nodes[a - 1]);
+        nods[a-1].bridges.push_back(&nods[b-1]);
+        nods[b-1].bridges.push_back(&nods[a-1]);
     }
 
     bool DFS(){
-        for (Node* node:nodes) {
-            if(Visit(1, node)) return true;
+        for (int i = 0; i < lenght; ++i) {
+            if(Visit(1, &nods[i])) return true;
         }
         return false;
     }

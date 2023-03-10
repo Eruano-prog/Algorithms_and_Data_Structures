@@ -10,6 +10,8 @@ using std::cin;
 struct point {
     int x, y, z;
 
+    point() = default;
+
     point(int i, int j, int k) {
         x = i;
         y = j;
@@ -33,13 +35,13 @@ public:
     Graph(point e, int E) {
         limit = E;
         end = new point(e.x, e.y, e.z);
-        points.resize(100, vector<vector<int>>(100));
-        visited.resize(100, vector<vector<bool>>(100));
+        points.resize(101, vector<vector<int>>(101));
+        visited.resize(101, vector<vector<bool>>(101));
 
-        for (int i = 0; i < 100; ++i) {
-            for (int j = 0; j < 100; ++j) {
-                points[i][j].resize(100, -1);
-                visited[i][j].resize(100, false);
+        for (int i = 0; i < 101; ++i) {
+            for (int j = 0; j < 101; ++j) {
+                points[i][j].resize(101, -1);
+                visited[i][j].resize(101, false);
             }
         }
     }
@@ -54,47 +56,70 @@ public:
         cout << points[end->x][end->y][end->z] << std::endl;
     }
 
+    void set_buildings(int K){
+        point p{};
+        int h;
+        for (int i = 0; i < K; ++i) {
+            cin >> p.x >> p.y >> p.z >> h;
+            p.x--; p.y--; p.z--;
+            build(p, h);
+        }
+    }
+
 private:
+
+    void build(point p, int h){
+        for (int i = 0; i < h; ++i) {
+            if(h >= 101) break;
+
+            visited[p.x][p.y][p.z+i] = true;
+        }
+    }
 
     void BFS() {
         while (!order.empty()) {
             point cur = order.front();
             order.pop();
-            cout << "Iteration" << std::endl;
 
-            if (cur == *end) {
+            if (cur.x == end->x && cur.y == end->y && cur.z == end->z) {
                 break;
             }
             int x = cur.x, y = cur.y, z = cur.z;
-            if (points[x][y][z] > limit) {
+            if (points[x][y][z] >= limit) {
                 continue;
             }
-
+//            cout << "Iteration" << std::endl;
             visited[x][y][z] = true;
 
-            if (cur.x + 1 < 100 && !visited[x + 1][y][z]) {
+            if (cur.x + 1 < 101 && !visited[x + 1][y][z]) {
                 order.emplace(x + 1, y, z);
                 points[x + 1][y][z] = points[x][y][z] + 1;
+                visited[x + 1][y][z] = true;
             }
             if (cur.x - 1 >= 0 && !visited[x - 1][y][z]) {
                 order.emplace(x - 1, y, z);
                 points[x - 1][y][z] = points[x][y][z] + 1;
+                visited[x - 1][y][z] = true;
             }
-            if (cur.y + 1 < 100 && !visited[x][y + 1][z]) {
+            if (cur.y + 1 < 101 && !visited[x][y + 1][z]) {
                 order.emplace(x, y + 1, z);
                 points[x][y + 1][z] = points[x][y][z] + 1;
+                visited[x][y + 1][z] = true;
             }
             if (cur.y - 1 >= 0 && !visited[x][y - 1][z]) {
                 order.emplace(x, y - 1, z);
                 points[x][y - 1][z] = points[x][y][z] + 1;
+                visited[x][y - 1][z] = true;
             }
-            if (cur.z + 1 < 100 && !visited[x][y][z + 1]) {
+            if (cur.z + 1 < 101 && !visited[x][y][z + 1]) {
                 order.emplace(x, y, z + 1);
                 points[x][y][z + 1] = points[x][y][z] + 1;
+                visited[x][y][z + 1] = true;
             }
             if (cur.z - 1 >= 0 && !visited[x][y][z - 1]) {
                 order.emplace(x, y, z - 1);
                 points[x][y][z - 1] = points[x][y][z] + 1;
+                visited[x][y][z - 1] = true;
             }
         }
     }
@@ -106,12 +131,14 @@ int main() {
 
     int x, y, z;
     cin >> x >> y >> z;
-    point begin(x - 1, y - 1, z - 1);
+    point begin(x, y, z);
 
     cin >> x >> y >> z;
-    point end(x - 1, y - 1, z - 1);
+    point end(x, y, z);
 
     Graph graph(end, E);
+
+    graph.set_buildings(K);
 
     graph.start_bfs(begin);
 

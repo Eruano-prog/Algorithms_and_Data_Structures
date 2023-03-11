@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using std::cout;
 using std::cin;
@@ -10,37 +11,57 @@ enum Color{
     black,
 };
 
-struct Node{
+struct Node {
     std::vector<Node *> bridges;
     Color color = white;
+    int distance = -1, count = 0;
 };
 
 
 class Graph{
 public:
-    Node* nods;
+    std::vector<Node> nods;
     int lenght;
+    std::queue<Node *> order;
 
     Graph(int t) {
-        nods = new Node[t];
-        for (int i = 0; i < t; ++i) {
-            nods[i] = Node();
-        }
+        nods.resize(t, Node());
         lenght = t;
     }
 
     void add_bridge(int a, int b) {
         nods[a-1].bridges.push_back(&nods[b-1]);
+        nods[a-1].count++;
+
         nods[b-1].bridges.push_back(&nods[a-1]);
+        nods[b-1].count++;
     }
 
-    bool DFS(){
-        for (int i = 0; i < lenght; ++i) {
-            if(Visit(1, &nods[i])) return true;
-        }
+    bool DFS(int n){
+        if(Visit(1, &nods[n])) return true;
         return false;
     }
+
+    int find_single(){
+        int amount = 0;
+        int indx = -1;
+        for (int i = 0; i < lenght; ++i) {
+            if (nods[i].count == 1){
+                amount++;
+                indx = i;
+            }
+        }
+        if (amount > 2 || amount == 0){
+            return -1;
+        }
+        else{
+            return indx;
+        }
+    }
+
 private:
+
+
     bool Visit(int len, Node* node){
         if (len == lenght){
             return true;
@@ -71,12 +92,14 @@ int main() {
         cin >> a >> b;
         graph.add_bridge(a, b);
     }
-    if (graph.DFS()){
-        cout << "YES" << std::endl;
+
+    int indx = graph.find_single();
+
+    if (indx != -1 && graph.DFS(indx)){
+        cout << "YES";
     }
     else{
-        cout << "NO" << std::endl;
+        cout << "NO";
     }
-
     return 0;
 }

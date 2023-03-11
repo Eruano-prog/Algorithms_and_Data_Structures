@@ -61,7 +61,6 @@ public:
 
 private:
 
-
     bool Visit(int len, Node* node){
         if (len == lenght){
             return true;

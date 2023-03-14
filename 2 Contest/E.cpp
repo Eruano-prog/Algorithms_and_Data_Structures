@@ -10,13 +10,7 @@ using std::cin;
 struct point {
     int x, y, z;
 
-    point() = default;
-
-    point(int i, int j, int k) {
-        x = i;
-        y = j;
-        z = k;
-    }
+    point(int i=0, int j=0, int k=0) : x(i), y(j), z(k) {}
 };
 
 bool operator==(point p1, point p2) {
@@ -30,11 +24,11 @@ class Graph {
     int limit;
 
 public:
-    point *end;
+    point end;
 
     Graph(point e, int E) {
         limit = E;
-        end = new point(e.x, e.y, e.z);
+        end = point(e.x, e.y, e.z);
         points.resize(101, vector<vector<int>>(101));
         visited.resize(101, vector<vector<bool>>(101));
 
@@ -48,12 +42,14 @@ public:
 
     void start_bfs(point point) {
         order.push(point);
+
         points[point.x][point.y][point.z] = 0;
+        visited[point.x][point.y][point.z] = true;
         BFS();
     }
 
     void get_answer() {
-        cout << points[end->x][end->y][end->z] << std::endl;
+        cout << points[end.x][end.y][end.z] << std::endl;
     }
 
     void set_buildings(int K){
@@ -61,7 +57,6 @@ public:
         int h;
         for (int i = 0; i < K; ++i) {
             cin >> p.x >> p.y >> p.z >> h;
-            p.x--; p.y--; p.z--;
             build(p, h);
         }
     }
@@ -70,7 +65,7 @@ private:
 
     void build(point p, int h){
         for (int i = 0; i < h; ++i) {
-            if(h >= 101) break;
+            if(p.z+i > 101) break;
 
             visited[p.x][p.y][p.z+i] = true;
         }
@@ -81,15 +76,13 @@ private:
             point cur = order.front();
             order.pop();
 
-            if (cur.x == end->x && cur.y == end->y && cur.z == end->z) {
+            if (cur.x == end.x && cur.y == end.y && cur.z == end.z) {
                 break;
             }
             int x = cur.x, y = cur.y, z = cur.z;
             if (points[x][y][z] >= limit) {
                 continue;
             }
-//            cout << "Iteration" << std::endl;
-            visited[x][y][z] = true;
 
             if (cur.x + 1 < 101 && !visited[x + 1][y][z]) {
                 order.emplace(x + 1, y, z);
@@ -143,5 +136,4 @@ int main() {
     graph.start_bfs(begin);
 
     graph.get_answer();
-
 }

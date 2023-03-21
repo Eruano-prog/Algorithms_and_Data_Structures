@@ -18,11 +18,12 @@ struct Node{
     int indx;
 
     Node(int t){
-        indx = t;
+        indx = 0;
     }
 };
 
 static std::stack<Node*> ans;
+static int count;
 
 class Graph{
 public:
@@ -39,24 +40,25 @@ public:
     }
 
     void DFS(){
-        for (Node* node:nodes) {
-            if(node->color == white) {
-                Visit(node);
+        for (int i = 0; i < nodes.size(); i++) {
+            if(nodes[i]->color == white) {
+                Visit(nodes[i]);
             }
         }
     }
 
-private:
+    private:
 
     void Visit(Node* node){
         node->color = gray;
         for (Node* bridge:node->bridges){
-            if (node->color == white){
+            if (bridge->color == white){
                 Visit(bridge);
             }
         }
         node->color = black;
-        ans.push(node);
+        node->indx = count;
+        count--;
     }
 };
 
@@ -65,6 +67,7 @@ int main(){
     int n, m;
     cin >> n >> m;
 
+    count = n;
     Graph graph(n);
 
     int a, b;
@@ -77,17 +80,7 @@ int main(){
     graph.DFS();
 
     int stack[n];
-    for (int i = n-1; i >= 0; --i) {
-        Node* node = ans.top();
-        ans.pop();
-        stack[i] = node->indx;
-    }
-    int answ[n];
     for (int i = 0; i < n; ++i) {
-        answ[stack[i]] = i+1;
-    }
-
-    for (int i = 0; i < n; ++i) {
-        cout << answ[i] << ' ';
+        cout << graph.nodes[i]->indx << ' ';
     }
 }

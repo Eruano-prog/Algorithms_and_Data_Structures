@@ -57,7 +57,6 @@ int main(){
 
     graph.Floyd_Warshall(K);
 
-    std::queue<int> ans;
     int Q;
     cin >> Q;
     int a, b;

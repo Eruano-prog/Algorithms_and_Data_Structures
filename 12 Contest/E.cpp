@@ -33,10 +33,19 @@ class Graph{
         if (cur == nodes.size()-1){
             return min;
         }
+        nodes[cur].visited = true;
         int res;
         for (auto edge : nodes[cur].edges) {
-            if (!nodes[edge.to].visited and )
+            if(!nodes[edge.to].visited) {
+                res = DFS(edge.to, min);
+                if(res != -1) {
+                    min = std::min(res, min);
+                    edge.weight -= min;
+                    add_edge(edge.from, edge.to, min);
+                }
+            }
         }
+        return -1
     }
 };
 

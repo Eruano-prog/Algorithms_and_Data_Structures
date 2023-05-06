@@ -5,47 +5,59 @@ using std::vector;
 using std::cout;
 using std::cin;
 
-struct Edge{
-    int from, to, weight;
-
-    Edge() = default;
-    Edge(int f, int t, int w): from(f), to(t), weight(w){}
-};
-
-struct Node{
-    vector<Edge> edges;
-    bool visited = false;
-};
 
 class Graph{
-    vector<Node> nodes;
-    vector<Node> path;
+    vector<vector<int>> graph;
+    vector<bool> visited;
+
+public:
 
     Graph(int N){
-        nodes.resize(N+1);
+        graph.resize(N);
+        visited.resize(N, false);
+        for (int i = 0; i < N; ++i) {
+            graph[i].resize(N, 0);
+        }
     }
 
     void add_edge(int from, int to, int weight){
-        nodes[from].edges.emplace_back(from, to, weight);
+        graph[from][to] = weight;
     }
 
-    int DFS(int cur, int min){
-        if (cur == nodes.size()-1){
-            return min;
+    int DFS(int cur, vector<int>& path){
+        path.push_back(cur);
+        if (cur == graph.size()-1){
+            return 100;
         }
-        nodes[cur].visited = true;
+        visited[cur] = true;
         int res;
-        for (auto edge : nodes[cur].edges) {
-            if(!nodes[edge.to].visited) {
-                res = DFS(edge.to, min);
-                if(res != -1) {
-                    min = std::min(res, min);
-                    edge.weight -= min;
-                    add_edge(edge.from, edge.to, min);
-                }
+        for (int i = 0; i < graph.size(); ++i) {
+            if(graph[cur][i] != 0 and !visited[i]){
+                res = DFS(i, path);
+                if (res != 0) return std::min(graph[cur][i], res);
             }
         }
-        return -1
+        path.pop_back();
+        return 0;
+    }
+
+    int F_F(){
+        int ans = 0;
+        vector<int> path;
+        int res = DFS(0, path);
+        while(res != 0){
+            ans += res;
+            for (int i = path.size()-1; i >= 1; --i) {
+                graph[path[i-1]][path[i]] -= res;
+                graph[path[i]][path[i-1]] += res;
+            }
+            path.resize(0);
+            for (int i = 0; i < graph.size(); ++i) {
+                visited[i] = false;
+            }
+            res = DFS(0, path);
+        }
+        return ans;
     }
 };
 
@@ -53,5 +65,13 @@ int main(){
     int N, M;
     cin >> N >> M;
 
+    Graph graph(N);
+    int f, t, w;
+    for (int i = 0; i < M; ++i) {
+        cin >> f >> t >> w;
+        f--; t--;
+        graph.add_edge(f, t, w);
+    }
 
+    cout << graph.F_F();
 }

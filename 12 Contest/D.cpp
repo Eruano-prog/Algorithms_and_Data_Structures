@@ -17,7 +17,6 @@ struct point{
         left = t;
     };
 };
-
 class Graph{
     vector<vector<point>> graph;
 

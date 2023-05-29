@@ -8,9 +8,9 @@ using std::cin;
 
 struct point {
     int x = -1, y = -1;
-    bool exists = false;
+    bool here = false;
 
-    point(int x=-1, int y=-1, bool e=false): x(x), y(y), exists(e) {}
+    point(int x=-1, int y=-1, bool e=false): x(x), y(y), here(e) {}
 };
 
 class Hash_table{
@@ -18,8 +18,8 @@ public:
     vector<point> hashTable;
     int size = 30000;
 
-    int Hash(int s, int m) {
-        return ((s*0.618) - floor(s*0.618)) * m;
+    int Hash(int s) {
+        return ((s*0.618) - floor(s*0.618)) * size;
     }
 
     int increase_hash(int& hash){
@@ -33,62 +33,61 @@ public:
     }
 
     void insert(int x, int y) {
-        int hash = Hash(x, size);
-        if (!hashTable[hash].exists) {
+        int hash = Hash(x);
+        if (!hashTable[hash].here) {
             point p(x, y, true);
             hashTable[hash] = p;
         }
         else {
             hash = increase_hash(hash);
 
-            while (hashTable[hash].exists) {
+            while (hashTable[hash].here) {
                 hash = increase_hash(hash);
             }
 
-            if (!hashTable[hash].exists) {
+            if (!hashTable[hash].here) {
                 point p(x, y, true);
                 hashTable[hash] = p;
             }
         }
 
-        int yHash = Hash(y, size);
-        if (!hashTable[yHash].exists) {
+        int hash_y = Hash(y);
+        if (!hashTable[hash_y].here) {
             point p(x, y, true);
-            hashTable[yHash] = p;
+            hashTable[hash_y] = p;
+            return;
         }
-        else {
-            yHash = increase_hash(yHash);
+        hash_y = increase_hash(hash_y);
 
-            while (hashTable[yHash].exists) {
-                yHash = increase_hash(yHash);
-            }
+        while (hashTable[hash_y].here) {
+            hash_y = increase_hash(hash_y);
+        }
 
-            if (!hashTable[yHash].exists) {
-                point p(x, y, true);
-                hashTable[yHash] = p;
-            }
+        if (!hashTable[hash_y].here) {
+            point p(x, y, true);
+            hashTable[hash_y] = p;
         }
     }
 
-    bool checkIfExists(int x, int y) {
-        int xHash = Hash(x, size);
-        if (hashTable[xHash].x == x and hashTable[xHash].exists) {
+    bool check(int x, int y) {
+        int hash_x = Hash(x);
+        if (hashTable[hash_x].x == x and hashTable[hash_x].here) {
             return true;
         }
-        while (hashTable[xHash].exists) {
-            xHash = increase_hash(xHash);
-            if (hashTable[xHash].x == x and hashTable[xHash].exists) {
+        while (hashTable[hash_x].here) {
+            hash_x = increase_hash(hash_x);
+            if (hashTable[hash_x].x == x and hashTable[hash_x].here) {
                 return true;
             }
         }
 
-        int yHash = Hash(y, size);
-        if (hashTable[yHash].y == y and hashTable[yHash].exists) {
+        int hash_y = Hash(y);
+        if (hashTable[hash_y].y == y and hashTable[hash_y].here) {
             return true;
         }
-        while (hashTable[yHash].exists) {
-            yHash = increase_hash(yHash);
-            if (hashTable[yHash].y == y and hashTable[yHash].exists) {
+        while (hashTable[hash_y].here) {
+            hash_y = increase_hash(hash_y);
+            if (hashTable[hash_y].y == y and hashTable[hash_y].here) {
                 return true;
             }
         }
@@ -98,9 +97,6 @@ public:
 };
 
 int main() {
-    cin.tie(0);
-    cout.tie(0);
-    std::ios_base::sync_with_stdio(false);
 
     int N;
     cin >> N;
@@ -112,12 +108,16 @@ int main() {
         int x, y;
         cin >> x >> y;
 
-        if (!H.checkIfExists(x, y)) {
+        if (!H.check(x, y)) {
             H.insert(x, y);
             count++;
         }
     }
 
-    if (count == 3) cout << "YES";
-    else cout << "NO";
+    if (count == 3) {
+        cout << "YES";
+    }
+    else {
+        cout << "NO";
+    }
 }

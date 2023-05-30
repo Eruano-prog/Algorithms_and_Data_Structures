@@ -31,10 +31,10 @@ bool isValidPhoneNumber(const std::string& phoneNumber) {
     return std::regex_match(phoneNumber, regex1);
 }
 
-bool isValidAddress(const std::string& address) {
+bool isValidAddress(const string& address) {
     // Формат адреса: g.XXX ul.XXX d.XXXXXX
-    std::regex regex(R"(^g.[A-Z]{3}, ul\.[A-Z][a-z]+, d\.[0-9]{2,}$)");
-    return std::regex_match(address, regex);
+    regex reg(R"(^g\.[A-Z]{3}, ul\.[A-Z][a-z]+, d\.[0-9][0-9]+ $)");
+    return regex_match(address, reg);
 }
 
 int main() {
@@ -58,12 +58,15 @@ int main() {
             address += str + ' ';
         }
 
-        if (isValidFullName(full_name) and isValidAge(age) and isValidAddress(address)){
-            cout << "YES\n";
-        }
-        else{
-            cout << "NO\n";
-        }
+        cout << '\n' << isValidFullName(full_name);
+        cout << '\n' << isValidAge(age);
+        cout << '\n' << isValidAddress(address);
+//        if (isValidFullName(full_name) and isValidAge(age) and isValidAddress(address)){
+//            cout << "YES\n";
+//        }
+//        else{
+//            cout << "NO\n";
+//        }
     }
 
     return 0;

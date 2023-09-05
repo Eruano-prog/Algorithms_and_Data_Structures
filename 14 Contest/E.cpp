@@ -27,10 +27,8 @@ bool isValidPhoneNumber(const string& phoneNumber) {
     // 79676557542
     // 89686557442
     // +7(967)-666-74-42
-    regex regex1(R"(\+?7\d{10})");
-    regex regex2(R"(8\d{10})");
-    regex regex4(R"(\+7\(\d{3}\)-?\d{3}-?\d{2}-?\d{2})");
-    return regex_match(phoneNumber, regex1) or regex_match(phoneNumber, regex2) or regex_match(phoneNumber, regex4);
+    regex pattern(R"((\+?7|8)\(\d{3}\)-?\d{3}-?\d{2}-?\d{2})");
+    return regex_match(phoneNumber, pattern);
 }
 
 bool isValidAddress(const string& address) {
@@ -45,8 +43,9 @@ int main() {
     cin.ignore();
 
     string str;
-    bool flag = true;
     for (int i = 0; i < N; ++i) {
+        bool flag = true;
+
         string name, age, phone, address;
 
         std::getline(cin, str);

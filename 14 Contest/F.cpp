@@ -15,7 +15,7 @@ int main(){
         cin >> arr[i];
 
     std::queue<int> ans;
-
+    
     for(int i = N / 2; i < N; i++){
         int k = 1;
         bool f = true;
